@@ -14,10 +14,25 @@ int main(void) {
   or_sr(0x18);		/* CPU off, GIE on */
 }
 
+unsigned char wcount = 0;
+
+everySecond() {
+  static unsigned char led_on = 0;
+  led_on = !led_on;
+  if(led_on) {
+    P1OUT |= LED_GREEN;
+  }
+
+  else {P1OUT &= ~LED_GREEN;}
+}
 
 void
 __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
 {
-  P1OUT |= LED_GREEN;
+  wcount++;
+  if(wcount == 250) {
+    everySecond();
+    wcount = 0;
+  }
 } 
 

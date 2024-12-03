@@ -17,13 +17,28 @@ int main(void) {
 // global state var to count time
 int secondCount = 0;
 
+everyIteration() {
+  static unsigned char led_on = 0;
+  led_on = !led_on;
+  if(led_on) {
+    P1OUT &= ~LED_RED;
+    P1OUT |= LED_GREEN;
+  }
+
+  else {
+    P1OUT &= ~LED_GREEN;
+    P1OUT |= LED_RED;
+  }
+}
+
 void
 __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
 {
   secondCount ++;
-  if (secondCount >= 250) { 	/* once each sec... */
+  // Changed every iteration to run approximately 75% faster per second than 250 interrupts/sec.
+  if (secondCount >= 500) { 	/* once each sec... */
     secondCount = 0;		/* reset count */
-    P1OUT ^= LED_GREEN;		/* toggle green LED */
+    everyIteration();		/* toggle green LED */
   }
 } 
 

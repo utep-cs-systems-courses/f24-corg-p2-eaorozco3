@@ -1,0 +1,25 @@
+COMMON_OBJECTS	= toyMain.o buzzer.o state_machines.o p2_interrupt_handler.o switch.o led.o
+CPU		= msp430g2553
+CFLAGS		= -mmcu=${CPU} -I../h -L/opt/ti/msp430_gcc/include
+
+CC		= msp430-elf-gcc
+AS		= msp430-elf-as
+
+all: toy.elf
+
+toy.elf: ${COMMON_OBJECTS} transition-c.o ../lib/libTimer.a
+	${CC} ${CFLAGS} -o $@ $^
+
+load: toy.elf
+	msp430loader.sh $^
+
+clean: $^
+	rm -f *.o *.elf
+
+toyMain.c: led.h switch.h buzzer.h
+switch.c: switch.h state_machines.h led.h buzzer.h
+led.c: led.h
+p2_interrupt_handler.c: switch.h
+state_machines.c: state_machines.h led.h buzzer.h
+buzzer.c: buzzer.h
+transition-c.c: switch.h state_machines.h

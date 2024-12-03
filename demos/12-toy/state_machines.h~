@@ -1,0 +1,8 @@
+#include <msp430.h>
+
+int secCount;
+void first_transition();
+void second_transition();
+void light_pattern();
+void sound_pattern();
+void bright_to_dim_green();

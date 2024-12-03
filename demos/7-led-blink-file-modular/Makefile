@@ -12,7 +12,7 @@ all: blink.elf
 
 #additional rules for files
 blink.elf: ${COMMON_OBJECTS} blinkMain.o stateMachines.o led.o wdInterruptHandler.o ../lib/libTimer.a
-	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
+	${AS} ${CFLAGS} ${LDFLAGS} -o $@ $^
 
 load: blink.elf
 	msp430loader.sh blink.elf
@@ -20,7 +20,7 @@ load: blink.elf
 clean:
 	rm -f *.o *.elf
 
-led.o: led.c led.h
+led.o: led_s.s led.h
 
 wdInterruptHandler.o: stateMachines.h
 

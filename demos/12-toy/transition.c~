@@ -1,0 +1,7 @@
+#include <msp430.h>
+#include "switch.h"
+#include "transition.h"
+
+void first_transition() {
+  (firstSw_transition >= 2) ? firstSw_transition = 1 : firstSw_transition++;
+}

@@ -1,0 +1,14 @@
+	.arch msp430g2553
+	.p2align 1,0
+	.text
+	.extern firstSw_transition
+	.global first_transition
+
+first_transition:
+	cmp #2, &firstSw_transition
+	jnc reset
+	add.b #1, &firstSw_transition
+	pop r0
+reset:
+	mov.b #1, &firstSw_transition
+	pop r0

@@ -23,6 +23,21 @@ void main(void)
   or_sr(0x18);  // CPU off, GIE on
 } 
 
+void alternate() {
+  static unsigned char buttonPress = 1;
+  if(buttonPress) {
+    P1OUT &= ~LED_RED;
+    P1OUT |= LED_GREEN;
+    buttonPress = 0;
+  }
+
+  else {
+    P1OUT &= ~LED_GREEN;
+    P1OUT |= LED_RED;
+    buttonPress = 1;
+  }
+}
+
 void
 switch_interrupt_handler()
 {
@@ -32,13 +47,9 @@ switch_interrupt_handler()
   P1IES |= (p1val & SWITCHES);	/* if switch up, sense down */
   P1IES &= (p1val | ~SWITCHES);	/* if switch down, sense up */
 
-/* up=red, down=green */
-  if (p1val & SW1) {
-    P1OUT |= LED_RED;
-    P1OUT &= ~LED_GREEN;
-  } else {
-    P1OUT |= LED_GREEN;
-    P1OUT &= ~LED_RED;
+  /* up=red, down=green */
+  if (!(p1val & SW1)) {
+    alternate();
   }
 }
 
